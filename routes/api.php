@@ -39,14 +39,16 @@ Route::delete('/user/{id}', function (string $id) {
     return $response;
 });
 
-Route::post('/signin', function (Request $request) {
-    $response = User::where('email', $request->input('email'))
-                    ->where('password', md5($request->input('password')))
-                    ->get();
+Route::group(['middleware' => ['web']], function () {
+    Route::post('/signin', function (Request $request) {
+        $response = User::where('email', $request->input('email'))
+                        ->where('password', md5($request->input('password')))
+                        ->get();
 
-    if (count($response)) {
-        // $request->session()->put('name', $response[0]->name);
-    }
-    
-    return count($response);
+        if (count($response)) {
+            $request->session()->put('name', $response[0]->name);
+        }
+        
+        return count($response);
+    });
 });

@@ -114,7 +114,8 @@
                     type: 'POST',
                     data: {
                         email: $('#email').val(),
-                        password: $('#password').val()
+                        password: $('#password').val(),
+                        _token: '{{csrf_token()}}'
                     },
                     dataType: 'json',
                     success: function (res) {
