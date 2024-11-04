@@ -299,7 +299,7 @@
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item active">
             <a class="nav-link" href="{{ url('mahasiswa') }}">
               <i class="icon-head menu-icon"></i>
               <span class="menu-title">Mahasiswa</span>
@@ -318,7 +318,7 @@
                   <!-- <p class="card-description">
                     Basic form layout
                   </p> -->
-                  <form class="forms-sample" method="post" action="/SaveMahasiswa">
+                  <form class="forms-sample" method="post" id="form">
                     @csrf
                     <div class="form-group">
                       <label for="nim">NIM</label>
@@ -357,11 +357,7 @@
                     </div>
                     <div class="form-group">
                       <label for="prodi">Program Studi</label>
-                      <select class="form-control" id="prodi" placeholder="Prodi" name="prodi">
-                        <?php foreach($prodi as $row) : ?>
-                        <option value="{{$row->id}}">{{$row->nama}}</option>
-                        <?php endforeach; ?>
-                      </select>
+                      <select class="form-control" id="prodi" placeholder="Prodi" name="prodi"></select>
                     </div>
                     <div class="form-group">
                       <label for="kelas">Kelas</label>
@@ -394,6 +390,10 @@
   <script src="/vendors/js/vendor.bundle.base.js"></script>
   <!-- endinject -->
   <!-- Plugin js for this page -->
+  <!-- <script src="/vendors/jquery-3.7.1.min.js"></script> -->
+  <script src="/vendors/jquery-validation-1.19.5/jquery.validate.min.js"></script>
+  <script src="/vendors/jquery-validation-1.19.5/additional-methods.min.js"></script>
+  <script src="/vendors/sweetalert/sweetalert.min.js"></script>
   <!-- End plugin js for this page -->
   <!-- inject:js -->
   <script src="/js/off-canvas.js"></script>
@@ -404,6 +404,125 @@
   <!-- endinject -->
   <!-- Custom js for this page-->
   <!-- End custom js for this page-->
+  <script>
+    $(document).ready(function () {
+      $('#signout').click(function () {
+        $.ajax({
+          url: "{{ url('/api/signout') }}",
+          success: function () {
+            window.location = "{{ url('/') }}";
+          },
+          error: function (err) {
+              console.log(err);
+
+              swal({
+                  title: 'Gagal',
+                  text: err.responseJSON.message,
+                  icon: 'error'
+              });
+          }
+        });
+      });
+
+      $.ajax({
+        url: "{{ url('/api/prodi') }}",
+        dataType: 'json',
+        success: function (res) {
+          $.each(res.data, function (index, value) {
+            $('#prodi').append('<option value="' + value.id + '">' + value.nama + '</option>');
+          });
+        },
+        error: function (err) {
+          console.log(err);
+
+          swal({
+              title: 'Gagal',
+              text: err.responseJSON.message,
+              icon: 'error'
+          });
+        }
+      });
+
+      $('#form').validate({
+        rules: {
+          nim: {
+            required: true
+          },
+          nama: {
+            required: true
+          },
+          jenis_kelamin: {
+            required: true
+          },
+          email: {
+            required: true,
+            email: true
+          },
+          password: {
+            required: true
+          },
+          hp: {
+            required: true
+          },
+          prodi: {
+            required: true
+          },
+          kelas: {
+            required: true
+          }
+        },
+        messages: {
+          nim: {
+            required: 'NIM harus diisi',
+          },
+          nama: {
+            required: 'Nama harus diisi',
+          },
+          jenis_kelamin: {
+            required: 'Jenis Kelamin harus dipilih',
+          },
+          email: {
+            required: 'Email harus diisi',
+            email: 'Harus sesuai format email'
+          },
+          password: {
+            required: 'Password harus diisi'
+          },
+          hp: {
+            required: 'HP harus diisi'
+          },
+          prodi: {
+            required: 'Program Studi harus dipilih'
+          },
+          kelas: {
+            required: 'Kelas harus diisi'
+          }
+        },
+        errorClass: "text-danger",
+        submitHandler: function () {
+          $.ajax({
+            url: "{{ url('/api/mahasiswa') }}",
+            method: 'POST',
+            type: 'POST',
+            data: $('#form').serialize(),
+            dataType: 'json',
+            success: function () {
+              window.location = "{{ url('/mahasiswa') }}";
+            },
+            error: function (err) {
+              console.log(err);
+
+              swal({
+                  title: 'Gagal',
+                  text: 'Gagal menyimpan data',
+                  icon: 'error'
+              });
+            }
+          });
+        }
+      });
+    });
+  </script>
 </body>
 
 </html>

@@ -19,3 +19,10 @@ Route::get('/mahasiswa', function () {
     else
         return view('mahasiswa.index');
 });
+
+Route::get('/addMahasiswa', function () {
+    if (empty(session('name')))
+        return redirect('/')->send();
+    else
+        return view('mahasiswa.add');
+});

@@ -6,12 +6,13 @@ use App\Models\Mahasiswa;
 use App\Models\Prodi;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class MahasiswaController extends Controller
 {
     //
     public function index() {
-        $response = Mahasiswa::all();
+        $response = Mahasiswa::with(['user', 'prodi'])->get();
         
         return ['data' => $response];
     }
@@ -27,7 +28,7 @@ class MahasiswaController extends Controller
 
         $user->name = $request->input('nama');
         $user->email = $request->input('email');
-        $user->password = md5($request->input('password'));
+        $user->password = Hash::make($request->input('password'));
 
         $user->save();
 
@@ -44,7 +45,7 @@ class MahasiswaController extends Controller
 
         $mhs->save();
 
-        return redirect('/Mahasiswa');
+        return [];
     }
 
     public function destroy($id) {
@@ -56,6 +57,6 @@ class MahasiswaController extends Controller
 
         $user->delete();
 
-        return redirect('/Mahasiswa');
+        return [];
     }
 }

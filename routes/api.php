@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\ProdiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +49,7 @@ Route::group(['middleware' => ['web']], function () {
                         ->get();
 
         if (count($response) && Hash::check($request->input('password'), $response[0]->password)) {
+            $request->session()->put('id', $response[0]->id);
             $request->session()->put('name', $response[0]->name);
         }
         
@@ -60,6 +62,8 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('/mahasiswa', [MahasiswaController::class, 'index']);
     // Route::get('/AddMahasiswa', [MahasiswaController::class, 'create']);
-    // Route::post('/SaveMahasiswa', [MahasiswaController::class, 'store']);
-    // Route::get('/DeleteMahasiswa/{id}', [MahasiswaController::class, 'destroy']);
+    Route::post('/mahasiswa', [MahasiswaController::class, 'store']);
+    Route::get('/mahasiswa/{id}', [MahasiswaController::class, 'destroy']);
+
+    Route::get('/prodi', [ProdiController::class, 'index']);
 });

@@ -73,7 +73,7 @@
   <script src="/vendors/js/vendor.bundle.base.js"></script>
   <!-- endinject -->
   <!-- Plugin js for this page -->   
-  <script src="/vendors/jquery-3.7.1.min.js"></script>
+  <!-- <script src="/vendors/jquery-3.7.1.min.js"></script> -->
   <script src="/vendors/jquery-validation-1.19.5/jquery.validate.min.js"></script>
   <script src="/vendors/jquery-validation-1.19.5/additional-methods.min.js"></script>
   <script src="/vendors/sweetalert/sweetalert.min.js"></script>

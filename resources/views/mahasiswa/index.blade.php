@@ -316,7 +316,7 @@
                 <div class="card-body">
                   <h4 class="card-title">Mahasiswa</h4>
                   <p class="card-description">
-                    <a href="/AddMahasiswa" class="btn btn-primary btn-sm">Tambah</a>
+                    <a href="{{ url('addMahasiswa') }}" class="btn btn-primary btn-sm">Tambah</a>
                   </p>
                   <div class="table-responsive">
                     <table class="table table-hover">
@@ -363,7 +363,8 @@
   <script src="/vendors/js/vendor.bundle.base.js"></script>
   <!-- endinject -->
   <!-- Plugin js for this page -->
-  <script src="/vendors/jquery-3.7.1.min.js"></script>
+  <!-- <script src="/vendors/jquery-3.7.1.min.js"></script> -->
+  <script src="/vendors/sweetalert/sweetalert.min.js"></script>
   <!-- End plugin js for this page -->
   <!-- inject:js -->
   <script src="/js/off-canvas.js"></script>
@@ -383,15 +384,23 @@
             success: function (res) {
                 var view = '';
 
-                $.each(res.data, function (index, value) {console.log(value);
+                $.each(res.data, function (index, value) {
                     view += '<tr>';
                     view += '<td>' + value.nim + '</td>';
-                    view += '<td>' + value.nim + '</td>';
+                    view += '<td>' + value.user.name + '</td>';
                     view += '<td>' + value.jenis_kelamin + '</td>';
-                    view += '<td>' + value.nim + '</td>';
+                    view += '<td>' + value.user.email + '</td>';
                     view += '<td>' + value.hp + '</td>';
-                    view += '<td>' + value.nim + '</td>';
+                    view += '<td>' + value.prodi.nama + '</td>';
                     view += '<td>' + value.kelas + '</td>';
+                    view += '<td>';
+                    view += '<a href="javascript::void(0);" class="btn btn-warning btn-sm edit" data-id="' + value.id + '">Ubah</a> ';
+
+                    if (value.user.id != "{{ session('id') }}") {
+                      view += '<a href="javascript::void(0);" class="btn btn-danger btn-sm delete" data-id="' + value.id + '">Hapus</a>';
+                    }
+
+                    view += '</td>';
                     view += '</tr>';
                 });
 
@@ -410,6 +419,46 @@
                     icon: 'error'
                 });
             }
+        });
+
+        $('.table').on('click', '.delete', function () {
+          var id = $(this).data('id');
+
+          if (confirm('Apakah Anda yakin akan menghapus data?')) {
+            $.ajax({
+              url: "{{ url('/api/mahasiswa') }}/" + id,
+              success: function () {
+                window.location = "{{ url('/mahasiswa') }}";
+              },
+              error: function (err) {
+                console.log(err);
+
+                swal({
+                    title: 'Gagal',
+                    text: err.responseJSON.message,
+                    icon: 'error'
+                });
+              }
+            });
+          }
+        });
+
+        $('#signout').click(function () {
+          $.ajax({
+            url: "{{ url('/api/signout') }}",
+            success: function () {
+              window.location = "{{ url('/') }}";
+            },
+            error: function (err) {
+                console.log(err);
+
+                swal({
+                    title: 'Gagal',
+                    text: err.responseJSON.message,
+                    icon: 'error'
+                });
+            }
+          });
         });
     });
    </script>
