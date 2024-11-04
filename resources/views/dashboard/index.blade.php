@@ -103,7 +103,7 @@
                 <i class="ti-settings text-primary"></i>
                 Settings
               </a>
-              <a class="dropdown-item" href="/Signout">
+              <a class="dropdown-item" href="javascript::void(0);" id="signout">
                 <i class="ti-power-off text-primary"></i>
                 Logout
               </a>
@@ -998,6 +998,27 @@
   <script src="js/dashboard.js"></script>
   <script src="js/Chart.roundedBarCharts.js"></script>
   <!-- End custom js for this page-->
+  <script>
+    $(document).ready(function () {
+      $('#signout').click(function () {
+        $.ajax({
+          url: "{{ url('/api/signout') }}",
+          success: function () {
+            window.location = "{{ url('/') }}";
+          },
+          error: function (err) {
+              console.log(err);
+
+              swal({
+                  title: 'Gagal',
+                  text: err.responseJSON.message,
+                  icon: 'error'
+              });
+          }
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>

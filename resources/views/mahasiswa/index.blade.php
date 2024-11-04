@@ -101,7 +101,7 @@
                 <i class="ti-settings text-primary"></i>
                 Settings
               </a>
-              <a class="dropdown-item">
+              <a class="dropdown-item" href="javascript::void(0);" id="signout">
                 <i class="ti-power-off text-primary"></i>
                 Logout
               </a>
@@ -293,7 +293,7 @@
       <!-- partial:../../partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
-        <li class="nav-item">
+          <li class="nav-item">
             <a class="nav-link" href="{{ url('dashboard') }}">
               <i class="icon-grid menu-icon"></i>
               <span class="menu-title">Dashboard</span>

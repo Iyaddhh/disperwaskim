@@ -7,9 +7,15 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard.index');
+    if (empty(session('name')))
+        return redirect('/')->send();
+    else
+        return view('dashboard.index');
 });
 
 Route::get('/mahasiswa', function () {
-    return view('mahasiswa.index');
+    if (empty(session('name')))
+        return redirect('/')->send();
+    else
+        return view('mahasiswa.index');
 });
