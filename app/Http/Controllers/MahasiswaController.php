@@ -17,6 +17,14 @@ class MahasiswaController extends Controller
         return ['data' => $response];
     }
 
+    public function edit($id) {
+        $response = Mahasiswa::with(['user', 'prodi'])
+                    ->where('id', $id) 
+                    ->first();
+        
+        return ['data' => $response];
+    }
+
     public function create() {
         $prodi = Prodi::all();
 
@@ -48,6 +56,31 @@ class MahasiswaController extends Controller
         return [];
     }
 
+    public function update(Request $request, $id) {
+
+        $mhs = Mahasiswa::find($id);
+
+        // $mhs->user_id = $user->id;
+        $mhs->prodi_id = $request->input('prodi');
+        $mhs->nim = $request->input('nim');
+        $mhs->jenis_kelamin = $request->input('jenis_kelamin');
+        $mhs->hp = $request->input('hp');
+        $mhs->kelas = $request->input('kelas');
+
+        $mhs->save();
+
+       
+        $user = User::find($mhs->user_id);
+
+        $user->name = $request->input('nama');
+        $user->email = $request->input('email');
+        $user->password = Hash::make($request->input('password'));
+
+        $user->save();
+
+        return [];
+    }
+    
     public function destroy($id) {
         $mhs = Mahasiswa::find($id);
         

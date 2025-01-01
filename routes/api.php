@@ -51,6 +51,8 @@ Route::group(['middleware' => ['web']], function () {
         if (count($response) && Hash::check($request->input('password'), $response[0]->password)) {
             $request->session()->put('id', $response[0]->id);
             $request->session()->put('name', $response[0]->name);
+        } else {
+            $response = [];
         }
         
         return count($response);
@@ -61,9 +63,13 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::get('/mahasiswa', [MahasiswaController::class, 'index']);
+    Route::get('/mahasiswa/{id}', [MahasiswaController::class, 'edit']);
+
     // Route::get('/AddMahasiswa', [MahasiswaController::class, 'create']);
+
     Route::post('/mahasiswa', [MahasiswaController::class, 'store']);
-    Route::get('/mahasiswa/{id}', [MahasiswaController::class, 'destroy']);
+    Route::put('/mahasiswa/{id}', [MahasiswaController::class, 'update']);
+    Route::delete('/mahasiswa/{id}', [MahasiswaController::class, 'destroy']);
 
     Route::get('/prodi', [ProdiController::class, 'index']);
 });
